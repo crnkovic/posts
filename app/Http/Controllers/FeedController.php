@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\PostRepository;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,10 +16,10 @@ class FeedController extends Controller
      * @param PostRepository $posts
      * @return Response
      */
-    public function show(PostRepository $posts) : Response
+    public function show(Request $request, PostRepository $posts) : Response
     {
         return Inertia::render('Feed', [
-            'posts' => $posts->includingLikes(),
+            'posts' => $posts->includingLikes($request),
         ]);
     }
 }

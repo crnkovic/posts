@@ -18,6 +18,20 @@ const showAllLikes = () => {
         loadingAllLikes.value = false
     })
 }
+
+let likedByCurrentUser = ref(props.post.liked_by_current_user || false)
+
+const like = () => {
+    axios.post('/api/posts/'+props.post.id+'/likes')
+
+    likedByCurrentUser.value = true
+}
+
+const unlike = () => {
+    axios.delete('/api/posts/'+props.post.id+'/likes')
+
+    likedByCurrentUser.value = false
+}
 </script>
 
 <template>
@@ -43,6 +57,11 @@ const showAllLikes = () => {
                 <span class="ml-2" v-if="post.total_likes-post.likes.length > 0">and {{ post.total_likes-post.likes.length }} others</span>
                 <span class="ml-1">have liked the post.</span>
                 <button type="button" class="inline-flex ml-2 text-blue-500 hover:underline" @click.prevent="showAllLikes">View all</button>
+
+                <template v-if="$page.props.auth.user">
+                    <button type="button" class="inline-flex ml-2 text-blue-500 hover:underline" @click.prevent="like" v-if="! likedByCurrentUser">Like</button>
+                    <button type="button" class="inline-flex ml-2 text-blue-500 hover:underline" @click.prevent="unlike" v-else>Unlike</button>
+                </template>
             </div>
         </div>
 

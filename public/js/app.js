@@ -22589,12 +22589,27 @@ __webpack_require__.r(__webpack_exports__);
       });
     };
 
+    var likedByCurrentUser = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.post.liked_by_current_user || false);
+
+    var like = function like() {
+      axios.post('/api/posts/' + props.post.id + '/likes');
+      likedByCurrentUser.value = true;
+    };
+
+    var unlike = function unlike() {
+      axios["delete"]('/api/posts/' + props.post.id + '/likes');
+      likedByCurrentUser.value = false;
+    };
+
     var __returned__ = {
       props: props,
       loadingAllLikes: loadingAllLikes,
       showingAllLikes: showingAllLikes,
       likes: likes,
       showAllLikes: showAllLikes,
+      likedByCurrentUser: likedByCurrentUser,
+      like: like,
+      unlike: unlike,
       ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -24240,17 +24255,19 @@ var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_15 = ["onClick"];
-var _hoisted_16 = {
-  key: 1
-};
-var _hoisted_17 = {
-  key: 0
-};
+var _hoisted_16 = ["onClick"];
+var _hoisted_17 = ["onClick"];
 var _hoisted_18 = {
   key: 1
 };
+var _hoisted_19 = {
+  key: 0
+};
+var _hoisted_20 = {
+  key: 1
+};
 
-var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "All likes (this should be displayed pretty, but yeah....): ", -1
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "All likes (this should be displayed pretty, but yeah....): ", -1
 /* HOISTED */
 );
 
@@ -24291,7 +24308,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.showAllLikes, ["prevent"])
   }, "View all", 8
   /* PROPS */
-  , _hoisted_15)])]), $setup.showingAllLikes ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [$setup.loadingAllLikes ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_17, " Loading... ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18, [_hoisted_19, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.likes, function (user) {
+  , _hoisted_15), _ctx.$page.props.auth.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, [!$setup.likedByCurrentUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    key: 0,
+    type: "button",
+    "class": "inline-flex ml-2 text-blue-500 hover:underline",
+    onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.like, ["prevent"])
+  }, "Like", 8
+  /* PROPS */
+  , _hoisted_16)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    key: 1,
+    type: "button",
+    "class": "inline-flex ml-2 text-blue-500 hover:underline",
+    onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.unlike, ["prevent"])
+  }, "Unlike", 8
+  /* PROPS */
+  , _hoisted_17))], 2112
+  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), $setup.showingAllLikes ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [$setup.loadingAllLikes ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_19, " Loading... ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20, [_hoisted_21, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.likes, function (user) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name) + ",", 1
     /* TEXT */
     );

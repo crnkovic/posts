@@ -21,6 +21,9 @@ class PostResource extends JsonResource
             'image_url' => $this->imageUrl(),
             'total_likes' => $this->total_likes,
             'likes' => $this->whenLoaded('likes'),
+            $this->mergeWhen($request->user() !== null, fn () => [
+                'liked_by_current_user' => $request->user()->hasLiked($this->resource),
+            ]),
             'created_at' => $this->created_at,
             'created_at_pretty' => $this->created_at->format('F j, Y'),
         ];

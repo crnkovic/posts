@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostRepository
@@ -17,10 +18,13 @@ class PostRepository
     /**
      * Get all of the posts for the feed.
      *
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function includingLikes() : AnonymousResourceCollection
+    public function includingLikes(Request $request) : AnonymousResourceCollection
     {
+        optional($request->user())->load('likes');
+
         return PostResource::collection(
                 Post::latest('created_at')
                     ->with(['author:id,name,email', 'likes' => fn ($query) => $query->limit(static::DISPLAYABLE_LIKES)])
@@ -36,6 +40,8 @@ class PostRepository
      */
     public function forUser(User $user) : AnonymousResourceCollection
     {
+        $user->load('likes');
+
         return PostResource::collection(
                 $user->posts()
                     ->latest('created_at')

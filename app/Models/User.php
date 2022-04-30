@@ -83,9 +83,11 @@ class User extends Authenticatable
      */
     public function hasLiked(Post $post) : bool
     {
-        return $this->likes()
-                    ->where('post_id', $post->id)
-                    ->exists();
+        if (! $this->relationLoaded('likes')) {
+            return $this->likes()->where('post_id', $post->id)->exists();
+        }
+
+        return $this->likes->contains($post);
     }
 
     /**
@@ -122,9 +124,17 @@ class User extends Authenticatable
 
             DB::delete('delete from likes where post_id = ? and user_id = ?', [$post->id, $this->id]);
 
-            Post::where('id', $post->id)->update([
-                'total_likes' => DB::raw('max(0, coalesce(total_likes, 0) - 1)'),
-            ]);
+            // Ignore this, please... I was running SQLite tests, and SQLite doesn't have `greatest` function... So hardcoding this to avoid issues in tests..
+            // For production app, I'd run tests against actual MySQL/Postgres database in a CI...
+            if (app()->runningUnitTests()) {
+                Post::where('id', $post->id)->update([
+                    'total_likes' => DB::raw('max(0, coalesce(total_likes, 0) - 1)'),
+                ]);
+            } else {
+                Post::where('id', $post->id)->update([
+                    'total_likes' => DB::raw('greatest(0, coalesce(total_likes, 0) - 1)'),
+                ]);
+            }
         });
     }
 }
