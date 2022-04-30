@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\FeedController;
 use App\Http\Controllers\Api\LikeController;
+use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Feed...
-Route::get('/feed', [FeedController::class, 'index']);
+Route::get('/feed', [FeedController::class, 'show']);
 
 // Internal...
+Route::post('/login', [LoginController::class, 'store']);
 Route::get('/posts', [PostController::class, 'index']);
-Route::get('/write', [PostController::class, 'create']);
 Route::post('/posts', [PostController::class, 'store']);
 Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 

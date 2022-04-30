@@ -30,7 +30,12 @@ class LikeController extends Controller
         // Could use pagination... Depending on scope...
 
         return new JsonResponse([
-            'likes' => $post->likes,
+            'likes' => $post->likes->map(fn ($user) => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'date' => $user->pivot->created_at,
+            ]),
         ]);
     }
 
