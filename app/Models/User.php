@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +25,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = ['avatar'];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
@@ -34,11 +42,22 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the user's Gravatar URL based on the email hash.
      *
-     * @var array<string, string>
+     * @return Attribute
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function avatar() : Attribute
+    {
+        return Attribute::get(fn () => 'https://www.gravatar.com/avatar/'.md5(trim($this->email)).'?f=y&d=wavatar');
+    }
+
+    /**
+     * Get all of the user's posts.
+     *
+     * @return HasMany
+     */
+    public function posts() : HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 }
