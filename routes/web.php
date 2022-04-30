@@ -21,6 +21,7 @@ Route::get('/', [FeedController::class, 'show']);
 
 // Internal...
 Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
+Route::get('/write', [PostController::class, 'create']);
 Route::post('/posts', [PostController::class, 'store']);
 Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
