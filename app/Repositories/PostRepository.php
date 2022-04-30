@@ -12,6 +12,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class PostRepository
 {
     public const PER_PAGE = 2;
+    public const DISPLAYABLE_LIKES = 5;
 
     /**
      * Get all of the posts for the feed.
@@ -22,7 +23,7 @@ class PostRepository
     {
         return PostResource::collection(
                 Post::latest('created_at')
-                    ->with('author:id,name,email')
+                    ->with(['author:id,name,email', 'likes' => fn ($query) => $query->limit(static::DISPLAYABLE_LIKES)])
                     ->simplePaginate(static::PER_PAGE)
         );
     }
@@ -38,7 +39,7 @@ class PostRepository
         return PostResource::collection(
                 $user->posts()
                     ->latest('created_at')
-                    ->with('author:id,name,email')
+                    ->with(['author:id,name,email', 'likes' => fn ($query) => $query->limit(static::DISPLAYABLE_LIKES)])
                     ->simplePaginate(static::PER_PAGE)
         );
     }

@@ -19,8 +19,10 @@ class PostResource extends JsonResource
             'author' => $this->whenLoaded('author'),
             'title' => $this->title,
             'image_url' => $this->imageUrl(),
-            'created_at_pretty' => $this->created_at->format('F j, Y'),
+            'total_likes' => $this->total_likes,
+            'likes' => $this->whenLoaded('likes'),
             'created_at' => $this->created_at,
+            'created_at_pretty' => $this->created_at->format('F j, Y'),
         ];
     }
 }

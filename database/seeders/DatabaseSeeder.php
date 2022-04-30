@@ -17,9 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->create([
+        $josip = User::factory()->create([
             'name' => 'Josip Crnkovic',
             'email' => 'josip@hey.com',
+        ]);
+
+        $john = User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->seedPosts();
@@ -41,11 +46,13 @@ class DatabaseSeeder extends Seeder
                 $path = 'images/'.Str::random(32).'.jpg', file_get_contents(storage_path('development/'.$randomImage.'.jpg'))
             );
 
-            Post::factory()->create([
+            $post = Post::factory()->create([
                 'title' => $title,
                 'user_id' => 1,
                 'image_path' => $path,
             ]);
+
+            User::first()->like($post);
         }
     }
 }

@@ -1,7 +1,23 @@
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps({
     post: Object
 })
+
+let loadingAllLikes = ref(true)
+let showingAllLikes = ref(false)
+let likes = ref([])
+const showAllLikes = () => {
+    loadingAllLikes.value = true
+
+    axios.get('/api/posts/'+props.post.id+'/likes').then(({ data }) => {
+        likes.value = data.likes
+
+        showingAllLikes.value = true
+        loadingAllLikes.value = false
+    })
+}
 </script>
 
 <template>
@@ -19,10 +35,26 @@ const props = defineProps({
                 <span>{{ post.created_at_pretty }}</span>
             </div>
             <span>&middot;</span>
-            <div class="flex items-center space-x-2">
-                <img :src="post.author.avatar" :alt="post.author.name" class="rounded-full w-5 h-5">
-                <span>{{ post.author.name }}</span>
+            <div class="flex items-center">
+                <div class="inline-flex items-center space-x-2" v-for="user in post.likes">
+                    <img :src="user.avatar" :alt="user.name" class="rounded-full w-5 h-5">
+                </div>
+
+                <span class="ml-2" v-if="post.total_likes-post.likes.length > 0">and {{ post.total_likes-post.likes.length }} others</span>
+                <span class="ml-1">have liked the post.</span>
+                <button type="button" class="inline-flex ml-2 text-blue-500 hover:underline" @click.prevent="showAllLikes">View all</button>
             </div>
+        </div>
+
+        <div v-if="showingAllLikes">
+            <span v-if="loadingAllLikes">
+                Loading...
+            </span>
+
+            <span v-else>
+                <span>All likes (this should be displayed pretty, but yeah....): </span>
+                <span v-for="user in likes">{{ user.name }},</span>
+            </span>
         </div>
     </div>
 </template>

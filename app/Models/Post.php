@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
@@ -36,7 +37,16 @@ class Post extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['user_id', 'title', 'image_path'];
+    protected $fillable = ['user_id', 'title', 'image_path', 'total_likes'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total_likes' => 'int',
+    ];
 
     /**
      * Perform any actions required after the model boots.
@@ -94,5 +104,17 @@ class Post extends Model
         if (! empty($this->image_path)) {
             Storage::disk(static::DISK)->delete($this->image_path);
         }
+    }
+
+    /**
+     * Get all of the users that liked the post.
+     *
+     * @return BelongsToMany
+     */
+    public function likes() : BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'likes')
+                ->withTimestamps()
+                ->latest('likes.created_at');
     }
 }
